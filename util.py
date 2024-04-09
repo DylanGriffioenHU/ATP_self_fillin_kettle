@@ -1,7 +1,9 @@
 from enum import Enum
 
+# This keeps the pins for the different components neatly in the same location in case one of them needs to be moved to a different pin
 class Pins(Enum):
-    D22 = 22
-    D23 = 23
-    D24 = 24
-    D25 = 25
+    D1 = 22
+    D2 = 23
+    D3 = 24
+    D4 = 25
+    D5 = 26
