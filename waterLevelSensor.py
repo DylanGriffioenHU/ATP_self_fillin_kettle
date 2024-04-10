@@ -8,15 +8,13 @@ from logger import log_arguments
 from fakeLoadCellLibrary.fakehx711 import hx711
 
 class LoadCell:
-    # HX711 circuit wiring
-    LOADCELL_DOUT_PIN = Pins.D2;
-    LOADCELL_SCK_PIN = Pins.D3;
     scale = hx711
 
     def __init__(self) -> None:
-        pass
-
-    def setup(self):
+        return
+    
+    @log_arguments
+    def setup(self, LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN):
         """
         Function that creates the load cell object and gives it the correct pins
 
@@ -26,10 +24,10 @@ class LoadCell:
                 Returns:
                         None
         """
-        self.scale.begin(self.LOADCELL_DOUT_PIN, self.LOADCELL_SCK_PIN);
-        pass
+        self.scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+        return
     
-    
+    @log_arguments
     def set_scale(self) -> None:
         """
         Function that sets the scale for the load cell
@@ -41,9 +39,9 @@ class LoadCell:
                         None
         """
         self.scale.set_scale()
-        pass
-
-
+        return
+    
+    @log_arguments
     def tare(self) -> None:
         """
         Function that tare the load cell
@@ -55,8 +53,8 @@ class LoadCell:
                         None
         """
         self.scale.tare()
-        pass    
-
+        return
+    
     @log_arguments
     def get_units(self) -> int:
         """
