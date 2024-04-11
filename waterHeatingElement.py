@@ -4,27 +4,13 @@ from util import Pins
 
 # class containing functions to controll the heating element for the kettle
 class Heating:
-    relay = Pins.D4
-
-    def __init__(self, maximum_temerature, minimum_waterlevel) -> None:
+    def __init__(self, maximum_temerature, minimum_waterlevel, relay_pin) -> None:
         self.maximum_temerature = maximum_temerature
         self.minimum_waterlevel = minimum_waterlevel
+        self.relay_pin = relay_pin
+        pinMode(relay_pin, OUTPUT)
         return
-
-    # Sets the relay pin to output mode
-    @log_arguments
-    def setup(self) -> None:
-        """
-        Sets the heating element relay pin to output mode
-
-                Parameters:
-                        None
-
-                Returns:
-                        None
-        """
-        pinMode(self.relay, OUTPUT)
-        pass
+    
 
     def control_heat(self, heat, water_level, heat_state):
         if water_level < self.minimum_waterlevel:
@@ -36,6 +22,7 @@ class Heating:
         elif heat >= self.maximum_temerature:
             if heat_state:
                 return self.heatOff()
+        return heat_state
 
     @log_arguments
     def heatOn(self) -> int:
@@ -48,7 +35,7 @@ class Heating:
                 Returns:
                         1 which is not needed but provides feedback to the main program
         """
-        digitalWrite(self.relay, HIGH)
+        digitalWrite(self.relay_pin, HIGH)
         return 1
 
     @log_arguments
@@ -62,5 +49,5 @@ class Heating:
                 Returns:
                         0 which is not needed but provides feedback to the main program
         """
-        digitalWrite(self.relay, LOW)
+        digitalWrite(self.relay_pin, LOW)
         return 0

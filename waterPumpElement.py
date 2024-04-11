@@ -3,7 +3,7 @@ from logger import log_arguments
 
 
 class Pump:
-    def __init__(self, relay_pin, minimum_waterlevel, maximum_waterlevel) -> None:
+    def __init__(self, minimum_waterlevel, maximum_waterlevel, relay_pin) -> None:
         self.relay_pin = relay_pin
         self.minimum_waterlevel = minimum_waterlevel
         self.maximum_waterlevel = maximum_waterlevel
@@ -60,7 +60,7 @@ class Pump:
                         1 to provide feedback on the pumps state
         """
         digitalWrite(self.relay_pin, HIGH)
-        return
+        return 1
     
     @log_arguments
     def pumpOff(self):
