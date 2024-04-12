@@ -1,16 +1,12 @@
 from fakeArduinoLibrary.fakeArduino import *
 from logger import log_arguments
 
-
 class Pump:
-    def __init__(self, minimum_waterlevel, maximum_waterlevel, relay_pin) -> None:
-        self.relay_pin = relay_pin
-        self.minimum_waterlevel = minimum_waterlevel
-        self.maximum_waterlevel = maximum_waterlevel
+    def __init__(self) -> None:
         return
     
     @log_arguments
-    def setup(self) -> None:
+    def set_pinmode(self, relay_pin) -> None:
         """
         Sets the pump element relay pin to output mode
 
@@ -20,58 +16,55 @@ class Pump:
                 Returns:
                         None
         """
-        pinMode(self.relay_pin, OUTPUT)
+        pinMode(relay_pin, OUTPUT)
         return
     
     @log_arguments
-    def control_pump(self, water_level, pump_state) -> int:
+    def control_pump(self, water_level, min_waterlevel, max_waterlevel, relay_pin) -> int:
         """
         decides whether the pump needs to be turned on or off and will do so if found to be neccesary
 
                 Parameters:
-                        water_level: this function needs the water level measured by waterLevelSensor.py
-                        pump_state: this function needs to know what state the pump is in
+                        water_level: how much water is already inside the kettle
+                        min_waterlevel: if water_level is below this it means that the kettle is not on the loadcell and the pump cannot turn on
+                        max_waterlevel: how much water is allowed to be pumped into the kettle
+                        relay_pin: the pin the pump relay is connected to
 
                 Returns:
                         0: if the pump is turned off
                         1: if the pump is turned on
-                        pump_state: if the function doesn't end up changing the pump stat for whatever reason it will return the pump stat variable
         """
-        if water_level < self.minimum_waterlevel:
-            if pump_state:
-                return self.pumpOff()
-        elif water_level >= self.minimum_waterlevel and water_level < self.maximum_waterlevel:
-            if not pump_state:
-                return self.pumpOn()
-        elif water_level >= self.maximum_waterlevel:
-            if pump_state:
-                return self.pumpOff()
-        return pump_state
+        if water_level < min_waterlevel:
+            return self.pumpOff(relay_pin)
+        elif water_level >= min_waterlevel and water_level < max_waterlevel:
+            return self.pumpOn(relay_pin)
+        elif water_level >= max_waterlevel:
+            return self.pumpOff(relay_pin)
 
     @log_arguments
-    def pumpOn(self) -> int:
+    def pumpOn(self, relay_pin) -> int:
         """
-        Turns on the pump element relay which turns on the pump element
+        Turns off the pump element relay which turns off the pump element. It returns a 1 as feedback of the pump elements state
 
                 Parameters:
                         None
 
                 Returns:
-                        1 to provide feedback on the pumps state
+                        1 to indicate it has turned the pump element off
         """
-        digitalWrite(self.relay_pin, HIGH)
+        digitalWrite(relay_pin, HIGH)
         return 1
     
     @log_arguments
-    def pumpOff(self):
+    def pumpOff(self, relay_pin):
         """
-        Turns off the pump element relay which turns off the pump element
+        Turns off the pump element relay which turns off the pump element. It returns a 0 as feedback of the pump elements state
 
                 Parameters:
                         None
 
                 Returns:
-                        0 to provide feedback on the pumps state
+                        0 to indicate it has turned the pump element off
         """
-        digitalWrite(self.relay_pin, LOW)
+        digitalWrite(relay_pin, LOW)
         return 0

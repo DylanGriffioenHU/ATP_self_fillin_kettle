@@ -1,20 +1,11 @@
-#library for the hx711 but since this load cell is simulated it won't be used yet
-#include "HX711.h"
-
-from util import Pins
 from logger import log_arguments
 
-# fake hx711 library for simulation purpose
-from fakeLoadCellLibrary.fakehx711 import hx711
-
 class LoadCell:
-    scale = hx711
-
     def __init__(self) -> None:
         return
     
     @log_arguments
-    def setup(self, LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN):
+    def setup(self, scale, LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN):
         """
         Function that creates the load cell object and gives it the correct pins
 
@@ -24,11 +15,11 @@ class LoadCell:
                 Returns:
                         None
         """
-        self.scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+        scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
         return
     
     @log_arguments
-    def set_scale(self) -> None:
+    def set_scale(self, scale) -> None:
         """
         Function that sets the scale for the load cell
 
@@ -38,11 +29,11 @@ class LoadCell:
                 Returns:
                         None
         """
-        self.scale.set_scale()
+        scale.set_scale()
         return
     
     @log_arguments
-    def tare(self) -> None:
+    def tare(self, scale) -> None:
         """
         Function that tare the load cell
 
@@ -52,11 +43,11 @@ class LoadCell:
                 Returns:
                         None
         """
-        self.scale.tare()
+        scale.tare()
         return
     
     @log_arguments
-    def get_units(self) -> int:
+    def get_units(self, scale) -> int:
         """
         Get's the weight from the load cell and returns it
 
@@ -66,4 +57,4 @@ class LoadCell:
         Returns:
                 Returns the weight measured by the load cell
         """
-        return self.scale.get_units()
+        return scale.get_units()

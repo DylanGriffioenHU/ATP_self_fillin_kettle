@@ -8,18 +8,7 @@
 
 class DS18B20{
     public:
-        #define ONE_WIRE_BUS 22
-
-        OneWire oneWire;
-        DallasTemperature sensors;
-
-        DS18B20(){
-            // Setup a oneWire instance to communicate with any OneWire devices
-            OneWire oneWire(ONE_WIRE_BUS);
-
-            // Pass our oneWire reference to Dallas Temperature sensor 
-            DallasTemperature sensors(&oneWire);
-        };
+        DS18B20(){};
 
         /**
         * Starts up the sensor and makes it ready for temperature reading
@@ -27,8 +16,7 @@ class DS18B20{
         * @param None
         * @return None
         */
-        void setup(void)
-        {
+        void setup(DallasTemperature sensors){
             sensors.begin();
         }
 
@@ -38,7 +26,27 @@ class DS18B20{
         * @param None
         * @return float returns the temperature the DS18B20 is measuring
         */
-        float requestTemperature(){
+        float request_temperature(DallasTemperature sensors){
             return sensors.requestTemperatures(); 
         }
 };
+
+/**
+* Creates a DS18B20 object, sets it up and returns a temperature reading.
+*
+* @param int: ONE_WIRE_BUS the pin number that the one wire bus is meant to be created on
+* @return float returns the temperature the DS18B20 is measuring
+*/
+float request_temperature_from_sensor(int ONE_WIRE_BUS){
+    // Setup a oneWire instance to communicate with any OneWire devices
+    OneWire oneWire(ONE_WIRE_BUS);
+
+    // Pass our oneWire reference to Dallas Temperature sensor 
+    DallasTemperature sensors(&oneWire);
+
+    DS18B20 temp_sensor;
+
+    temp_sensor.setup(sensors);
+
+    return temp_sensor.request_temperature(sensors);
+}

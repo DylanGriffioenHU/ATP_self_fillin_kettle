@@ -1,53 +1,72 @@
 from fakeArduinoLibrary.fakeArduino import *
 from logger import log_arguments
-from util import Pins
 
-# class containing functions to controll the heating element for the kettle
+# class containing functions to control the heating element for the kettle
 class Heating:
-    def __init__(self, maximum_temerature, minimum_waterlevel, relay_pin) -> None:
-        self.maximum_temerature = maximum_temerature
-        self.minimum_waterlevel = minimum_waterlevel
-        self.relay_pin = relay_pin
-        pinMode(relay_pin, OUTPUT)
+    def __init__(self) -> None:
         return
     
+    @log_arguments
+    def set_pinmode(self, relay_pin):
+        """
+        puts the given pin into output mode
 
-    def control_heat(self, heat, water_level, heat_state):
-        if water_level < self.minimum_waterlevel:
-            if heat_state:
-                return self.heatOff()
-        elif heat < self.maximum_temerature:
-            if not heat_state:
-                return self.heatOn()
-        elif heat >= self.maximum_temerature:
-            if heat_state:
-                return self.heatOff()
-        return heat_state
+                Parameters:
+                        relay_pin: the pin the pump relay is connected to
+
+                Returns:
+                        None
+        """
+        pinMode(relay_pin, OUTPUT)
+        return
 
     @log_arguments
-    def heatOn(self) -> int:
+    def control_heat(self, temperature, max_temperature, water_level, min_waterlevel, relay_pin):
         """
-        Turns on the heating element relay which turns on the heating element
+        decides whether the heating needs to be turned on or off and will do so if found to be neccesary
+
+                Parameters:
+                        temperature: the temperature of the water you want the heating element to heat
+                        max_temperature: the maximum temperature you want the water to get heated to
+                        water_level: how much water is already inside the kettle
+                        min_waterlevel: the mimimum amount of water that needs to be inside of the kettle before the heating is allowed to turn on
+                        relay_pin: the pin the heating relay is connected to
+
+                Returns:
+                        0: if the heating is turned off
+                        1: if the heating is turned on
+        """
+        if water_level < min_waterlevel:
+            return self.heatOff(relay_pin)
+        elif temperature < max_temperature:
+            return self.heatOn(relay_pin)
+        elif temperature >= max_temperature:
+            return self.heatOff(relay_pin)
+
+    @log_arguments
+    def heatOn(self, relay_pin) -> int:
+        """
+        Turns on the heating element relay which turns on the heating element. It returns a 1 as feedback of the heating elements state
 
                 Parameters:
                         None
 
                 Returns:
-                        1 which is not needed but provides feedback to the main program
+                        1 to indicate it has turned the heating element on
         """
-        digitalWrite(self.relay_pin, HIGH)
-        return 1
+        digitalWrite(relay_pin, HIGH)
+        return 1 # not really needed but it provides usefull feedback to the rest of the program
 
     @log_arguments
-    def heatOff(self):
+    def heatOff(self, relay_pin):
         """
-        Turns off the heating element relay which turns off the heating element
+        Turns off the heating element relay which turns off the heating element. It returns a 0 as feedback of the heating elements state
 
                 Parameters:
                         None
 
                 Returns:
-                        0 which is not needed but provides feedback to the main program
+                        0 to indicate it has turned the heating element off
         """
-        digitalWrite(self.relay_pin, LOW)
-        return 0
+        digitalWrite(relay_pin, LOW)
+        return 0 # not really needed but it provides usefull feedback to the rest of the program
