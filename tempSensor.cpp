@@ -1,10 +1,43 @@
+#include <iostream>
+#include <iomanip>
+#include "tempSensor.hpp"
+
 //#include <OneWire.h>
 //#include <DallasTemperature.h>
 
-// Since there won't be an actual sensore in this project fake versions of the library's will be used
-// The goal is to replace them with the real library's once the physical sensor is in use without having to change this code
-#include "fakeTempSensorLibraries/fakeOneWire.cpp"
-#include "fakeTempSensorLibraries/fakeDallasTemperature.cpp"
+// Since there won't be an actual sensors in this project fake versions of the library's will be used
+// The goal is to replace them with the real library's once the physical sensor is in use without having to change the code
+class OneWire{
+    public:
+        int ONE_WIRE_BUS;
+        OneWire(int ONE_WIRE_BUS){ONE_WIRE_BUS = ONE_WIRE_BUS;};
+        OneWire(){};
+};
+
+#include <cstdlib> 
+
+using namespace std; 
+
+// Placeholder for the DallasTemperature library that will be used once the actual DS18B20 sensor is implemented
+class DallasTemperature{
+    public:
+        OneWire oneWire;
+        DallasTemperature(OneWire* oneWire){oneWire = oneWire;};
+        DallasTemperature(){};
+
+        void begin(){};
+
+        /**
+        * Gets the temperature reading from the DS18B20 and returns it (returns a simulated value as the sensor is lacking in this project)
+        *
+        * @param None
+        * @return float returns the temperature the DS18B20 is measuring (returns a simulated value as the sensor is lacking in this project)
+        */
+        float requestTemperatures(){
+            return 55;
+        };
+};
+
 
 class DS18B20{
     public:
@@ -30,6 +63,7 @@ class DS18B20{
             return sensors.requestTemperatures(); 
         }
 };
+
 
 /**
 * Creates a DS18B20 object, sets it up and returns a temperature reading.

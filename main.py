@@ -7,6 +7,9 @@ import unittest
 from tests import *
 from simulator import simulator
 
+import ctypes
+import pathlib
+
 #library for the hx711 but since this load cell is simulated it won't be used yet
 #include "HX711.h"
 # fake hx711 library for simulation purpose
@@ -14,6 +17,26 @@ from fakeLoadCellLibrary.fakehx711 import hx711
 
 
 if __name__ == '__main__':
+    libname = pathlib.Path().absolute()
+    print("libname: ", libname)
+    pathstring = str(libname)
+    # Load the shared library into c types.
+    c_lib = ctypes.CDLL(pathstring+"/libtempSensor.so")
+        
+    # You need tell ctypes that the function returns a float
+    c_lib.request_temperature_from_sensor.restype = ctypes.c_float
+    answer = c_lib.request_temperature_from_sensor(5)
+    print(f"temperature: {answer:.1f}")
+    print("|-----------------------------------------|")
+    # Executing the load cell functions and showing the log
+    scale = hx711
+    loadcell_element = LoadCell()
+    loadcell_element.set_scale(scale)
+    loadcell_element.tare(scale)
+    print("Waterlevel: ",loadcell_element.get_units(scale))
+    log.show_log()
+    print("|-----------------------------------------|")
+    
     # Set up the tests
     test_loader = unittest.TestLoader()
     test1 = test_loader.loadTestsFromTestCase(Test1_control_heating_element)
@@ -32,14 +55,6 @@ if __name__ == '__main__':
     result4 = test_runner.run(test4)
     log.show_log()
 
-    # Executing the load cell functions and showing the log
-    scale = hx711
-    loadcell_element = LoadCell()
-    loadcell_element.set_scale(scale)
-    loadcell_element.tare(scale)
-    print("Waterlevel: ",loadcell_element.get_units(scale))
-    log.show_log()
-
     print("|-----------------------------------------|")
 
-    simulator()
+    #simulator(False, 1)
