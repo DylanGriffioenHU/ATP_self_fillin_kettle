@@ -1,9 +1,11 @@
 from logger import log_arguments
+from timing import time_function
 
 class LoadCell:
     def __init__(self) -> None:
         return
     
+    @time_function
     @log_arguments
     def setup(self, scale, LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN):
         """
@@ -18,6 +20,7 @@ class LoadCell:
         scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
         return
     
+    @time_function
     @log_arguments
     def set_scale(self, scale) -> None:
         """
@@ -32,6 +35,7 @@ class LoadCell:
         scale.set_scale()
         return
     
+    @time_function
     @log_arguments
     def tare(self, scale) -> None:
         """
@@ -46,6 +50,7 @@ class LoadCell:
         scale.tare()
         return
     
+    @time_function
     @log_arguments
     def get_units(self, scale) -> int:
         """

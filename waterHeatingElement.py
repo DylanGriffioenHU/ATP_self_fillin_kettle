@@ -1,11 +1,13 @@
 from fakeArduinoLibrary.fakeArduino import *
 from logger import log_arguments
+from timing import time_function
 
 # class containing functions to control the heating element for the kettle
 class Heating:
     def __init__(self) -> None:
         return
     
+    @time_function
     @log_arguments
     def set_pinmode(self, relay_pin):
         """
@@ -20,6 +22,7 @@ class Heating:
         pinMode(relay_pin, OUTPUT)
         return
 
+    @time_function
     @log_arguments
     def control_heat(self, temperature, max_temperature, water_level, min_waterlevel, relay_pin):
         """
@@ -42,7 +45,8 @@ class Heating:
             return self.heatOn(relay_pin)
         elif temperature >= max_temperature:
             return self.heatOff(relay_pin)
-
+    
+    @time_function
     @log_arguments
     def heatOn(self, relay_pin) -> int:
         """
@@ -57,6 +61,7 @@ class Heating:
         digitalWrite(relay_pin, HIGH)
         return 1 # not really needed but it provides usefull feedback to the rest of the program
 
+    @time_function
     @log_arguments
     def heatOff(self, relay_pin):
         """

@@ -1,10 +1,12 @@
 from fakeArduinoLibrary.fakeArduino import *
 from logger import log_arguments
+from timing import time_function
 
 class Pump:
     def __init__(self) -> None:
         return
     
+    @time_function
     @log_arguments
     def set_pinmode(self, relay_pin) -> None:
         """
@@ -19,6 +21,7 @@ class Pump:
         pinMode(relay_pin, OUTPUT)
         return
     
+    @time_function
     @log_arguments
     def control_pump(self, water_level, min_waterlevel, max_waterlevel, relay_pin) -> int:
         """
@@ -41,6 +44,7 @@ class Pump:
         elif water_level >= max_waterlevel:
             return self.pumpOff(relay_pin)
 
+    @time_function
     @log_arguments
     def pumpOn(self, relay_pin) -> int:
         """
@@ -55,6 +59,7 @@ class Pump:
         digitalWrite(relay_pin, HIGH)
         return 1
     
+    @time_function
     @log_arguments
     def pumpOff(self, relay_pin):
         """
