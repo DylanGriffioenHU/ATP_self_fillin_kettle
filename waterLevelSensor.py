@@ -2,6 +2,9 @@ from logger import log_arguments
 from timing import time_function
 
 class LoadCell:
+    """ Contains functions to control a load cell element through a hx711 element
+    """
+    
     def __init__(self) -> None:
         return
     

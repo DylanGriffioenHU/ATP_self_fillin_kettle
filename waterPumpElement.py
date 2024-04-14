@@ -3,6 +3,9 @@ from logger import log_arguments
 from timing import time_function
 
 class Pump:
+    """ Contains functions to control a relay which then controls the pump element
+    """
+    
     def __init__(self) -> None:
         return
     
@@ -38,15 +41,15 @@ class Pump:
                         1: if the pump is turned on
         """
         if water_level < min_waterlevel:
-            return self.pumpOff(relay_pin)
+            return self.pump_off(relay_pin)
         elif water_level >= min_waterlevel and water_level < max_waterlevel:
-            return self.pumpOn(relay_pin)
+            return self.pump_on(relay_pin)
         elif water_level >= max_waterlevel:
-            return self.pumpOff(relay_pin)
+            return self.pump_off(relay_pin)
 
     @time_function
     @log_arguments
-    def pumpOn(self, relay_pin) -> int:
+    def pump_on(self, relay_pin) -> int:
         """
         Turns off the pump element relay which turns off the pump element. It returns a 1 as feedback of the pump elements state
 
@@ -61,7 +64,7 @@ class Pump:
     
     @time_function
     @log_arguments
-    def pumpOff(self, relay_pin):
+    def pump_off(self, relay_pin):
         """
         Turns off the pump element relay which turns off the pump element. It returns a 0 as feedback of the pump elements state
 

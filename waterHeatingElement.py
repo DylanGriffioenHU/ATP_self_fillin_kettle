@@ -4,6 +4,9 @@ from timing import time_function
 
 # class containing functions to control the heating element for the kettle
 class Heating:
+    """ Contains functions to control a relay which then controls the heating element
+    """
+    
     def __init__(self) -> None:
         return
     
@@ -40,15 +43,15 @@ class Heating:
                         1: if the heating is turned on
         """
         if water_level < min_waterlevel:
-            return self.heatOff(relay_pin)
+            return self.heat_off(relay_pin)
         elif temperature < max_temperature:
-            return self.heatOn(relay_pin)
+            return self.heat_on(relay_pin)
         elif temperature >= max_temperature:
-            return self.heatOff(relay_pin)
+            return self.heat_off(relay_pin)
     
     @time_function
     @log_arguments
-    def heatOn(self, relay_pin) -> int:
+    def heat_on(self, relay_pin) -> int:
         """
         Turns on the heating element relay which turns on the heating element. It returns a 1 as feedback of the heating elements state
 
@@ -63,7 +66,7 @@ class Heating:
 
     @time_function
     @log_arguments
-    def heatOff(self, relay_pin):
+    def heat_off(self, relay_pin):
         """
         Turns off the heating element relay which turns off the heating element. It returns a 0 as feedback of the heating elements state
 

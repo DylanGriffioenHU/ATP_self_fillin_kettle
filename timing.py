@@ -2,6 +2,7 @@ import functools
 import time
 from functools import wraps
 
+# Todo - log the timing instead of printing it
 def time_function(function):
     """
     Times the given function and prints how long it took for that function to run in microseconds
@@ -15,10 +16,7 @@ def time_function(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         """
-        
-
-        Returns:
-            _type_: _description_
+        Times the given function and prints how long it took that function to run
         """
         start_time = time.perf_counter()
         result = function(*args, **kwargs)

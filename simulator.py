@@ -4,6 +4,13 @@ from waterHeatingElement import Heating
 import time
 
 def simulator(auto = False, sleep = 1):
+    """Simulates the system working in the commmandline
+
+    Args:
+        auto (bool, optional): If this is put to false the system is in user input mode and will ask you to input to take the kettle of the load cell and put it back on again
+        to simulate the system wating on user input to do this physically. Defaults to False.
+        sleep (int, optional): In order to make the simulation readable a sleep is used at the end to slow it down. Defaults to 1.
+    """
     relay_pin_1 = Pins.D1
     relay_pin_2 = Pins.D2
     min_waterlevel_pump = 100
@@ -51,13 +58,13 @@ def simulator(auto = False, sleep = 1):
         
         if water_level < min_waterlevel_pump:
             if auto:
-                print("Press y to put the kettle on the load cell")
+                print("Press y to put the empty kettle on the load cell")
                 print()
                 user_input = input()
                 if user_input == "y":
                     water_level = min_waterlevel_pump
             else:
-                print("putting kettle on load cell to fill with and boil water")
+                print("putting empty kettle on load cell to fill with and boil water")
                 print()
                 water_level = min_waterlevel_pump
     
@@ -82,3 +89,6 @@ def simulator(auto = False, sleep = 1):
         time.sleep(sleep)
         
     return
+
+if __name__ == '__main__':
+    simulator(True, 1)

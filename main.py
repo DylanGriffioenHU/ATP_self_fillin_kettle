@@ -22,39 +22,50 @@ if __name__ == '__main__':
     pathstring = str(libname)
     # Load the shared library into c types.
     c_lib = ctypes.CDLL(pathstring+"/libtempSensor.so")
-        
-    # You need tell ctypes that the function returns a float
+
     c_lib.request_temperature_from_sensor.restype = ctypes.c_float
-    answer = c_lib.request_temperature_from_sensor(5)
-    print(f"temperature: {answer:.1f}")
+    
+    # Giving the function the D3 pin to make the onewire bus on
+    temperature = c_lib.request_temperature_from_sensor(Pins.D3.value)
+    print(f"temperature: {temperature:.1f}")
+    
     print("|-----------------------------------------|")
+    
     # Executing the load cell functions and showing the log
     scale = hx711
     loadcell_element = LoadCell()
     loadcell_element.set_scale(scale)
     loadcell_element.tare(scale)
-    print("Waterlevel: ",loadcell_element.get_units(scale))
+    waterlevel = loadcell_element.get_units(scale)
+    print("Waterlevel: ",waterlevel)
     log.show_log()
     print("|-----------------------------------------|")
     
-    # Set up the tests
-    test_loader = unittest.TestLoader()
-    test1 = test_loader.loadTestsFromTestCase(Test1_control_heating_element)
-    test2 = test_loader.loadTestsFromTestCase(Test2_control_pump_element)
-    test3 = test_loader.loadTestsFromTestCase(Test3_control_heating_element_with_waterlevel)
-    test4 = test_loader.loadTestsFromTestCase(Test4_control_heat_and_waterlevel)
+    relay_pin_1 = Pins.D1
+    relay_pin_2 = Pins.D2
+    min_waterlevel_pump = 100
+    min_waterlevel_heat = 1000
+    max_waterlevel = 1500
+    max_temperature = 100
 
-    # Run the tests and show the logs
-    test_runner = unittest.TextTestRunner()
-    result = test_runner.run(test1)
-    log.show_log()
-    result2 = test_runner.run(test2)
-    log.show_log()
-    result3 = test_runner.run(test3)
-    log.show_log()
-    result4 = test_runner.run(test4)
-    log.show_log()
-
+    pump_element = Pump()
+    heating_element = Heating()
+    
+    pump_element.set_pinmode(relay_pin_1)
+    heating_element.set_pinmode(relay_pin_2)
+    
+    print("Temperature: ", temperature)
+    print("Waterlevel: ", waterlevel)
+    
+    if heating_element.control_heat(temperature, max_temperature, waterlevel, min_waterlevel_heat, relay_pin_1):
+        print("heating is turned on")
+    else:
+        print("heating is turned off")
+        
+    if pump_element.control_pump(waterlevel, min_waterlevel_pump, max_waterlevel, relay_pin_2):
+        print("heating is turned on")
+    else:
+        print("heating is turned off")
+        
     print("|-----------------------------------------|")
-
-    #simulator(False, 1)
+    log.show_log()
