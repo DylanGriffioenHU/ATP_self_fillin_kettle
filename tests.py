@@ -87,10 +87,10 @@ class Test3_control_heating_element_with_waterlevel(unittest.TestCase):
         # Heat is too low, waterlevel is too low
         heating_element_state = heating_element.control_heat(10, max_temperature, 500, min_waterlevel, relay_pin) # returned state should be 0 meaning heating is turned off
         
-        # Heat is too low, waterlevel is too low
+        # Heat high enough waterlevel is too low
         heating_element_state_2 = heating_element.control_heat(100, max_temperature, 500, min_waterlevel, relay_pin) # returned state should be 0 meaning heating is turned off
 
-        # Heat high enough, waterlevel is good
+        # Heat is too low, waterlevel is good
         heating_element_state_3 = heating_element.control_heat(10, max_temperature, 1100, min_waterlevel, relay_pin) # returned state should be 1 meaning heating is turned on
 
          # Heat high enough, waterlevel is good

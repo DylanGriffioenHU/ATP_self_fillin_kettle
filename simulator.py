@@ -57,7 +57,7 @@ def simulator(auto = False, sleep = 1):
         print()
         
         if water_level < min_waterlevel_pump:
-            if auto:
+            if not auto:
                 print("Press y to put the empty kettle on the load cell")
                 print()
                 user_input = input()
@@ -69,7 +69,7 @@ def simulator(auto = False, sleep = 1):
                 water_level = min_waterlevel_pump
     
         if temperature == max_temperature:
-            if auto:
+            if not auto:
                 print("press y to remove the kettle from the load cell and take your boiling water")
                 print("press n to quit the simulation")
                 print()
@@ -91,4 +91,4 @@ def simulator(auto = False, sleep = 1):
     return
 
 if __name__ == '__main__':
-    simulator(True, 1)
+    simulator(False, 1)
